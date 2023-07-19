@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	config "github.com/ardin2001/backend-pemilu/configs"
-	model "github.com/ardin2001/backend-pemilu/models"
+	"github.com/ardin2001/backend-pemilu/models"
 )
 
 func MigrateDB() {
@@ -14,5 +14,5 @@ func MigrateDB() {
 		return
 	}
 
-	DB.AutoMigrate(&model.User{})
+	DB.AutoMigrate(&models.User{}, &models.Admin{})
 }
