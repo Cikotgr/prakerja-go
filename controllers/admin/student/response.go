@@ -1,10 +1,8 @@
-package models
+package student
 
-import (
-	"time"
-)
+import "time"
 
-type Student struct {
+type StudentResponse struct {
 	ID        string `gorm:"primarykey"`
 	NIM       int    `gorm:"unique"`
 	CreatedAt time.Time
