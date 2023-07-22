@@ -7,7 +7,7 @@ import (
 )
 
 type StudentRepositoryInterface interface {
-	GetAll() (*[]student.StudentResponse, error)
+	GetAll(nim string) (*[]student.StudentResponse, error)
 	GetById(id string) (*student.StudentResponse, error)
 	Create(student *models.Student) error
 	Update(student *models.Student) error
@@ -24,9 +24,10 @@ func NewStudentRepository(DB *gorm.DB) StudentRepositoryInterface {
 	}
 }
 
-func (sr *StudentRepositoryStruct) GetAll() (*[]student.StudentResponse, error) {
+func (sr *StudentRepositoryStruct) GetAll(nim string) (*[]student.StudentResponse, error) {
 	var students []student.StudentResponse
-	err := sr.DB.Table("students").Find(&students).Error
+
+	err := sr.DB.Table("students").Where("nim LIKE ?", "%"+nim+"%").Find(&students).Error
 	if err != nil {
 		return nil, err
 	}
@@ -35,7 +36,7 @@ func (sr *StudentRepositoryStruct) GetAll() (*[]student.StudentResponse, error) 
 
 func (sr *StudentRepositoryStruct) GetById(id string) (*student.StudentResponse, error) {
 	var student student.StudentResponse
-	err := sr.DB.Table("students").First(&student).Where("id = ?", id).Error
+	err := sr.DB.Table("students").First(&student).Error
 	if err != nil {
 		return nil, err
 	}

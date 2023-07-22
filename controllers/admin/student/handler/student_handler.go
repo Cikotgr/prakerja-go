@@ -1,10 +1,9 @@
 package handler
 
 import (
-	"net/http"
-
 	"github.com/ardin2001/backend-pemilu/controllers/admin/student"
 	"github.com/ardin2001/backend-pemilu/controllers/admin/student/usecase"
+	"github.com/ardin2001/backend-pemilu/helper"
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
 )
@@ -28,21 +27,24 @@ func NewStudentHandler(StudentUsecase usecase.StudentUsecaseInterface) StudentHa
 }
 
 func (sh *StudentHandlerStruct) GetAll(c echo.Context) error {
-	students, err := sh.StudentUsecase.GetAll()
+	var getRequestParam student.GetRequestParam
+	c.Bind(&getRequestParam)
+
+	students, statusCode, err := sh.StudentUsecase.GetAll(getRequestParam.NIM)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, students)
+		c.JSON(statusCode, helper.ResponseData("failed to get all students data", statusCode, nil))
 	}
-	return c.JSON(http.StatusOK, students)
+	return c.JSON(statusCode, helper.ResponseData("successful to get all students data", statusCode, students))
 }
 
 func (sh *StudentHandlerStruct) GetById(c echo.Context) error {
 	id := c.Param("id")
 
-	student, err := sh.StudentUsecase.GetById(id)
+	student, statusCode, err := sh.StudentUsecase.GetById(id)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, student)
+		c.JSON(statusCode, helper.ResponseData("failed to get student detail data", statusCode, nil))
 	}
-	return c.JSON(http.StatusOK, student)
+	return c.JSON(statusCode, helper.ResponseData("successful to get student detail data", statusCode, student))
 }
 
 func (sh *StudentHandlerStruct) Create(c echo.Context) error {
@@ -51,11 +53,11 @@ func (sh *StudentHandlerStruct) Create(c echo.Context) error {
 	c.Bind(&student)
 	student.ID = id
 
-	err := sh.StudentUsecase.Create(&student)
+	statusCode, err := sh.StudentUsecase.Create(&student)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, nil)
+		c.JSON(statusCode, helper.ResponseData("failed to create student data", statusCode, nil))
 	}
-	return c.JSON(http.StatusOK, nil)
+	return c.JSON(statusCode, helper.ResponseData("successful to create student data", statusCode, nil))
 }
 
 func (sh *StudentHandlerStruct) Update(c echo.Context) error {
@@ -64,18 +66,19 @@ func (sh *StudentHandlerStruct) Update(c echo.Context) error {
 	c.Bind(&student)
 	student.ID = id
 
-	err := sh.StudentUsecase.Update(&student)
+	statusCode, err := sh.StudentUsecase.Update(&student)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, nil)
+		c.JSON(statusCode, helper.ResponseData("failed to update student data", statusCode, nil))
 	}
-	return c.JSON(http.StatusOK, nil)
+	return c.JSON(statusCode, helper.ResponseData("successful to update student data", statusCode, nil))
 }
 
 func (sh *StudentHandlerStruct) Delete(c echo.Context) error {
 	id := c.Param("id")
-	err := sh.StudentUsecase.Delete(id)
+
+	statusCode, err := sh.StudentUsecase.Delete(id)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, nil)
+		c.JSON(statusCode, helper.ResponseData("failed to delete student data", statusCode, nil))
 	}
-	return c.JSON(http.StatusOK, nil)
+	return c.JSON(statusCode, helper.ResponseData("successful to delete student data", statusCode, nil))
 }
