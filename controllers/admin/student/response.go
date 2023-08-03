@@ -3,8 +3,8 @@ package student
 import "time"
 
 type StudentResponse struct {
-	ID        string `gorm:"primarykey"`
-	NIM       int    `gorm:"unique"`
-	CreatedAt time.Time
-	UpdatedAt time.Time
+	ID        string    `gorm:"primarykey" json:"id"`
+	NIM       int       `gorm:"unique" json:"nim"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
 }

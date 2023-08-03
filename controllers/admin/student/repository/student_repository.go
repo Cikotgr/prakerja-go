@@ -36,7 +36,7 @@ func (sr *StudentRepositoryStruct) GetAll(nim string) (*[]student.StudentRespons
 
 func (sr *StudentRepositoryStruct) GetById(id string) (*student.StudentResponse, error) {
 	var student student.StudentResponse
-	err := sr.DB.Table("students").First(&student).Error
+	err := sr.DB.Table("students").Where("id =?", id).First(&student).Error
 	if err != nil {
 		return nil, err
 	}

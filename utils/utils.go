@@ -14,5 +14,5 @@ func MigrateDB() {
 		return
 	}
 
-	DB.AutoMigrate(&models.Student{}, &models.Admin{})
+	DB.AutoMigrate(&models.Role{}, &models.Student{}, &models.Admin{})
 }

@@ -1,10 +1,14 @@
 package handler
 
 import (
+	"os"
+	"strconv"
+
 	"github.com/ardin2001/backend-pemilu/controllers/admin/student"
 	"github.com/ardin2001/backend-pemilu/controllers/admin/student/usecase"
 	"github.com/ardin2001/backend-pemilu/helper"
 	"github.com/google/uuid"
+	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 )
 
@@ -32,7 +36,7 @@ func (sh *StudentHandlerStruct) GetAll(c echo.Context) error {
 
 	students, statusCode, err := sh.StudentUsecase.GetAll(getRequestParam.NIM)
 	if err != nil {
-		c.JSON(statusCode, helper.ResponseData("failed to get all students data", statusCode, nil))
+		return c.JSON(statusCode, helper.ResponseData("failed to get all students data", statusCode, nil))
 	}
 	return c.JSON(statusCode, helper.ResponseData("successful to get all students data", statusCode, students))
 }
@@ -42,20 +46,29 @@ func (sh *StudentHandlerStruct) GetById(c echo.Context) error {
 
 	student, statusCode, err := sh.StudentUsecase.GetById(id)
 	if err != nil {
-		c.JSON(statusCode, helper.ResponseData("failed to get student detail data", statusCode, nil))
+		return c.JSON(statusCode, helper.ResponseData("failed to get student detail data", statusCode, nil))
 	}
 	return c.JSON(statusCode, helper.ResponseData("successful to get student detail data", statusCode, student))
 }
 
 func (sh *StudentHandlerStruct) Create(c echo.Context) error {
 	var student student.CreateStudent
+	godotenv.Load()
+	user := os.Getenv("ROLE_DEFAULT")
+	userInt, _ := strconv.Atoi(user)
+	student.RoleId = userInt
 	id := uuid.New().String()
 	c.Bind(&student)
 	student.ID = id
 
+	err := isRequestValid(student)
+	if err != nil {
+		return c.JSON(401, helper.ResponseData(err.Error(), 401, nil))
+	}
+
 	statusCode, err := sh.StudentUsecase.Create(&student)
 	if err != nil {
-		c.JSON(statusCode, helper.ResponseData("failed to create student data", statusCode, nil))
+		return c.JSON(statusCode, helper.ResponseData("failed to create student data", statusCode, nil))
 	}
 	return c.JSON(statusCode, helper.ResponseData("successful to create student data", statusCode, nil))
 }
@@ -68,7 +81,7 @@ func (sh *StudentHandlerStruct) Update(c echo.Context) error {
 
 	statusCode, err := sh.StudentUsecase.Update(&student)
 	if err != nil {
-		c.JSON(statusCode, helper.ResponseData("failed to update student data", statusCode, nil))
+		return c.JSON(statusCode, helper.ResponseData("failed to update student data", statusCode, nil))
 	}
 	return c.JSON(statusCode, helper.ResponseData("successful to update student data", statusCode, nil))
 }
@@ -78,7 +91,7 @@ func (sh *StudentHandlerStruct) Delete(c echo.Context) error {
 
 	statusCode, err := sh.StudentUsecase.Delete(id)
 	if err != nil {
-		c.JSON(statusCode, helper.ResponseData("failed to delete student data", statusCode, nil))
+		return c.JSON(statusCode, helper.ResponseData("failed to delete student data", statusCode, nil))
 	}
 	return c.JSON(statusCode, helper.ResponseData("successful to delete student data", statusCode, nil))
 }
