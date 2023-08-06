@@ -2,7 +2,6 @@ package usecase
 
 import (
 	"net/http"
-	"strconv"
 
 	"github.com/ardin2001/backend-pemilu/controllers/admin/student"
 	"github.com/ardin2001/backend-pemilu/controllers/admin/student/repository"
@@ -44,17 +43,13 @@ func (su *StudentUsecaseStruct) GetById(id string) (*student.StudentResponse, in
 }
 
 func (su *StudentUsecaseStruct) Create(student *student.CreateStudent) (int, error) {
-	var newStudent models.Student
-	num, err := strconv.Atoi(student.NIM)
-	if err == nil {
-		newStudent = models.Student{
-			ID:     student.ID,
-			NIM:    num,
-			RoleId: student.RoleId,
-		}
+	newStudent := models.Student{
+		ID:     student.ID,
+		NIM:    student.NIM,
+		RoleId: student.RoleId,
 	}
 
-	err = su.StudentRepository.Create(&newStudent)
+	err := su.StudentRepository.Create(&newStudent)
 	if err != nil {
 		return http.StatusInternalServerError, err
 	}
@@ -62,16 +57,12 @@ func (su *StudentUsecaseStruct) Create(student *student.CreateStudent) (int, err
 }
 
 func (su *StudentUsecaseStruct) Update(student *student.UpdateStudent) (int, error) {
-	var newStudent models.Student
-	num, err := strconv.Atoi(student.NIM)
-	if err != nil {
-		newStudent = models.Student{
-			ID:  student.ID,
-			NIM: num,
-		}
+	newStudent := models.Student{
+		ID:  student.ID,
+		NIM: student.NIM,
 	}
 
-	err = su.StudentRepository.Update(&newStudent)
+	err := su.StudentRepository.Update(&newStudent)
 	if err != nil {
 		return http.StatusInternalServerError, err
 	}

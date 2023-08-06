@@ -6,12 +6,12 @@ type GetRequestParam struct {
 
 type CreateStudent struct {
 	ID     string `json:"id" form:"id" validate:"required"`
-	NIM    string `json:"nim" form:"nim" validate:"required,number,min=12"`
+	NIM    int    `json:"nim" form:"nim" validate:"required,min=202410102000,max=232410102100"`
 	RoleId int    `json:"role_id" form:"role_id" validate:"required,number"`
 }
 
 type UpdateStudent struct {
 	ID     string `json:"id" form:"id"`
-	NIM    string `json:"nim" form:"nim"`
+	NIM    int    `json:"nim" form:"nim" validate:"required,min=202410102000,max=232410102100"`
 	RoleId int    `json:"role_id" form:"role_id" validate:"required,number"`
 }

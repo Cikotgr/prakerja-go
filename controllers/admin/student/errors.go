@@ -15,5 +15,7 @@ var (
 	ErrRequiredId  = errors.New("id is required")
 	ErrRequiredNIM = errors.New("nim is required")
 	ErrRequired    = errors.New("all fields are required")
-	ErrMinNIM      = errors.New("nim min 12")
+	ErrMinNIM      = errors.New("min nim should be 202410102000")
+	ErrMaxNIM      = errors.New("max nim should be 232410102100")
+	ErrRoleId      = errors.New("role id must be number")
 )

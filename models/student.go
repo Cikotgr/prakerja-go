@@ -5,9 +5,10 @@ import (
 )
 
 type Student struct {
-	ID        string `gorm:"primarykey"`
-	NIM       int    `gorm:"unique"`
-	RoleId    int    `gorm:"type:int(50);index"`
-	CreatedAt time.Time
-	UpdatedAt time.Time
+	ID                string             `gorm:"primarykey"`
+	NIM               int                `gorm:"unique"`
+	RoleId            int                `gorm:"type:int(50);index"`
+	CandidateStudents []CandidateStudent `gorm:"foreignKey:StudentId"`
+	CreatedAt         time.Time
+	UpdatedAt         time.Time
 }
