@@ -52,7 +52,7 @@ func (sr *StudentRepositoryStruct) Create(student *models.Student) error {
 }
 
 func (sr *StudentRepositoryStruct) Update(student *models.Student) error {
-	err := sr.DB.Updates(student).Error
+	err := sr.DB.Where("id = ?", student.ID).Updates(student).Error
 	if err != nil {
 		return err
 	}
