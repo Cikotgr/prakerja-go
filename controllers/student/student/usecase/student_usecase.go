@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	"errors"
 	"net/http"
 	"os"
 	"time"
@@ -28,7 +29,7 @@ func NewStudentUsecase(StudentRepository repository.StudentRepositoryInterface) 
 func (au *StudentUsecaseStruct) LoginStudent(nim string) (*student.StudentJWTResponse, int, error) {
 	data, err := au.StudentRepository.LoginStudent(nim)
 	if err != nil {
-		return nil, http.StatusInternalServerError, err
+		return nil, http.StatusInternalServerError, errors.New("failed to login student")
 	}
 
 	claims := &student.JwtCustomClaimsStudent{
@@ -48,7 +49,7 @@ func (au *StudentUsecaseStruct) LoginStudent(nim string) (*student.StudentJWTRes
 	secretKeyStudent := os.Getenv("SECRET_KEY_STUDENT")
 	newToken, err := token.SignedString([]byte(secretKeyStudent))
 	if err != nil {
-		return nil, 401, err
+		return nil, 401, errors.New("failed to generate sercret key jwt")
 	}
 
 	studentJWTResponse := student.StudentJWTResponse{

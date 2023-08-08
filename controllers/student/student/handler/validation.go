@@ -1,9 +1,9 @@
 package handler
 
 import (
+	"errors"
 	"fmt"
 
-	"github.com/ardin2001/backend-pemilu/controllers/admin/admin"
 	"github.com/go-playground/validator/v10"
 )
 
@@ -17,19 +17,19 @@ func isRequestValid(m interface{}) error {
 		for _, err := range err.(validator.ValidationErrors) {
 			if err.Tag() == "required" {
 				if err.Field() == "Username" && err.Field() == "Password" {
-					return admin.ErrRequired
+					return errors.New("all fields are required")
 				} else if err.Field() == "Username" {
-					return admin.ErrRequiredUsername
+					return errors.New("username is required")
 				} else if err.Field() == "Password" {
-					return admin.ErrRequiredPassword
+					return errors.New("password is required")
 				}
 			} else if err.Tag() == "min" {
 				if err.Field() == "Username" && err.Field() == "Password" {
-					return admin.ErrMin
+					return errors.New("all field min 6")
 				} else if err.Field() == "Username" {
-					return admin.ErrMinUsername
+					return errors.New("username min 6")
 				} else if err.Field() == "Password" {
-					return admin.ErrMinPassword
+					return errors.New("password min 6")
 				}
 			}
 		}

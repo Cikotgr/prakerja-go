@@ -32,7 +32,7 @@ func (ah *AdminHandlerStruct) LoginAdmin(c echo.Context) error {
 
 	adminJWTResponse, statusCode, err := ah.AdminUsecase.LoginAdmin(admin.Username, admin.Password)
 	if err != nil {
-		return c.JSON(statusCode, helper.ResponseData("failed to login", statusCode, nil))
+		return c.JSON(statusCode, helper.ResponseData(err.Error(), statusCode, nil))
 	}
 	return c.JSON(statusCode, helper.ResponseData("successful to login", statusCode, adminJWTResponse))
 }

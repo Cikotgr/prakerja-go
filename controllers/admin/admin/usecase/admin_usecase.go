@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	"errors"
 	"net/http"
 	"os"
 	"time"
@@ -28,7 +29,7 @@ func NewAdminUsecase(AdminRepository repository.AdminRepositoryInterface) AdminU
 func (au *AdminUsecaseStruct) LoginAdmin(username, password string) (*admin.AdminJWTResponse, int, error) {
 	data, err := au.AdminRepository.LoginAdmin(username, password)
 	if err != nil {
-		return nil, http.StatusInternalServerError, err
+		return nil, http.StatusInternalServerError, errors.New("failed to login admin")
 	}
 
 	claims := &admin.JwtCustomClaimsAdmin{
@@ -47,7 +48,7 @@ func (au *AdminUsecaseStruct) LoginAdmin(username, password string) (*admin.Admi
 	secretKey := os.Getenv("SECRET_KEY_ADMIN")
 	newToken, err := token.SignedString([]byte(secretKey))
 	if err != nil {
-		return nil, 401, err
+		return nil, 401, errors.New("failed to generate secret key jwt")
 	}
 
 	adminJWTResponse := admin.AdminJWTResponse{

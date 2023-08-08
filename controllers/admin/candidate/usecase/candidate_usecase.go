@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	"errors"
 	"net/http"
 
 	"github.com/ardin2001/backend-pemilu/controllers/admin/candidate"
@@ -29,7 +30,7 @@ func NewCandidateUsecase(CandidateRepository repository.CandidateRepositoryInter
 func (cu *CandidateUsecaseStruct) GetAll() (*[]candidate.CandidateResponse, int, error) {
 	candidates, err := cu.CandidateRepository.GetAll()
 	if err != nil {
-		return nil, http.StatusInternalServerError, err
+		return nil, http.StatusInternalServerError, errors.New("failed to get all candidate data")
 	}
 	return candidates, http.StatusOK, nil
 }
@@ -37,7 +38,7 @@ func (cu *CandidateUsecaseStruct) GetAll() (*[]candidate.CandidateResponse, int,
 func (cu *CandidateUsecaseStruct) GetById(id string) (*candidate.CandidateResponse, int, error) {
 	candidate, err := cu.CandidateRepository.GetById(id)
 	if err != nil {
-		return nil, http.StatusInternalServerError, err
+		return nil, http.StatusInternalServerError, errors.New("failed to get candidate data details")
 	}
 	return candidate, http.StatusOK, nil
 }
@@ -54,7 +55,7 @@ func (cu *CandidateUsecaseStruct) Create(candidate *candidate.CreateCandidate) (
 
 	err := cu.CandidateRepository.Create(&newCandidate)
 	if err != nil {
-		return http.StatusInternalServerError, err
+		return http.StatusInternalServerError, errors.New("failed to create candidate data")
 	}
 	return http.StatusOK, nil
 }
@@ -71,7 +72,7 @@ func (cu *CandidateUsecaseStruct) Update(candidate *candidate.UpdateCandidate) (
 
 	err := cu.CandidateRepository.Update(&newCandidate)
 	if err != nil {
-		return http.StatusInternalServerError, err
+		return http.StatusInternalServerError, errors.New("failed to update candidate data")
 	}
 	return http.StatusOK, nil
 }
@@ -79,7 +80,7 @@ func (cu *CandidateUsecaseStruct) Update(candidate *candidate.UpdateCandidate) (
 func (cu *CandidateUsecaseStruct) Delete(id string) (int, error) {
 	err := cu.CandidateRepository.Delete(id)
 	if err != nil {
-		return http.StatusInternalServerError, err
+		return http.StatusInternalServerError, errors.New("failed to delete candidate data")
 	}
 	return http.StatusOK, nil
 }

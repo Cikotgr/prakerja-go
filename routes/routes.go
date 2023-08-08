@@ -9,6 +9,9 @@ import (
 	AdminHandler "github.com/ardin2001/backend-pemilu/controllers/admin/admin/handler"
 	AdminRepository "github.com/ardin2001/backend-pemilu/controllers/admin/admin/repository"
 	AdminUsecase "github.com/ardin2001/backend-pemilu/controllers/admin/admin/usecase"
+	AdminCandidateHandler "github.com/ardin2001/backend-pemilu/controllers/admin/candidate/handler"
+	AdminCandidateRepository "github.com/ardin2001/backend-pemilu/controllers/admin/candidate/repository"
+	AdminCandidateUsecase "github.com/ardin2001/backend-pemilu/controllers/admin/candidate/usecase"
 	AdminStudentHandler "github.com/ardin2001/backend-pemilu/controllers/admin/student/handler"
 	AdminStudentRepository "github.com/ardin2001/backend-pemilu/controllers/admin/student/repository"
 	AdminStudentUsecase "github.com/ardin2001/backend-pemilu/controllers/admin/student/usecase"
@@ -35,6 +38,10 @@ func StartApp() *echo.Echo {
 	AdminR := AdminRepository.NewAdminRepository(DB)
 	AdminU := AdminUsecase.NewAdminUsecase(AdminR)
 	AdminH := AdminHandler.NewAdminHandler(AdminU)
+
+	AdminCandidateR := AdminCandidateRepository.NewCandidateRepository(DB)
+	AdminCandidateU := AdminCandidateUsecase.NewCandidateUsecase(AdminCandidateR)
+	AdminCandidateH := AdminCandidateHandler.NewCandidateHandler(AdminCandidateU)
 
 	StudentR := StudentRepository.NewStudentRepository(DB)
 	StudentU := StudentUsecase.NewStudentUsecase(StudentR)
@@ -76,6 +83,11 @@ func StartApp() *echo.Echo {
 	routeAdmin.POST("/students", AdminStudentH.Create)
 	routeAdmin.PUT("/students/:id", AdminStudentH.Update)
 	routeAdmin.DELETE("/students/:id", AdminStudentH.Delete)
+	routeAdmin.GET("/candidates", AdminCandidateH.GetAll)
+	routeAdmin.GET("/candidates/:id", AdminCandidateH.GetById)
+	routeAdmin.POST("/candidates", AdminCandidateH.Create)
+	routeAdmin.PUT("/candidates/:id", AdminCandidateH.Update)
+	routeAdmin.DELETE("/candidates/:id", AdminCandidateH.Delete)
 
 	routeStudent := e.Group("/students")
 	routeStudent.POST("/login", StudentH.LoginStudent)

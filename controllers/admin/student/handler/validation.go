@@ -1,9 +1,9 @@
 package handler
 
 import (
+	"errors"
 	"fmt"
 
-	"github.com/ardin2001/backend-pemilu/controllers/admin/student"
 	"github.com/go-playground/validator/v10"
 )
 
@@ -16,19 +16,17 @@ func isRequestValid(m interface{}) error {
 		for _, err := range err.(validator.ValidationErrors) {
 			fmt.Println("err :", err.Tag())
 			if err.Tag() == "required" {
-				if err.Field() == "ID" && err.Field() == "NIM" {
-					return student.ErrRequired
-				} else if err.Field() == "ID" {
-					return student.ErrRequiredId
+				if err.Field() == "ID" {
+					return errors.New("id is required")
 				} else if err.Field() == "NIM" {
-					return student.ErrRequiredNIM
+					return errors.New("nim is required")
 				}
 			} else if err.Tag() == "min" {
-				return student.ErrMinNIM
+				return errors.New("min nim should be 202410102000")
 			} else if err.Tag() == "max" {
-				return student.ErrMaxNIM
+				return errors.New("max nim should be 232410102100")
 			} else if err.Tag() == "number" {
-				return student.ErrRoleId
+				return errors.New("role id must be number")
 			}
 		}
 	}

@@ -6,6 +6,7 @@ import (
 	"github.com/ardin2001/backend-pemilu/controllers/admin/student"
 	"github.com/ardin2001/backend-pemilu/controllers/admin/student/repository"
 	"github.com/ardin2001/backend-pemilu/models"
+	"github.com/pkg/errors"
 )
 
 type StudentUsecaseInterface interface {
@@ -29,7 +30,7 @@ func NewStudentUsecase(StudentRepository repository.StudentRepositoryInterface) 
 func (su *StudentUsecaseStruct) GetAll(nim string) (*[]student.StudentResponse, int, error) {
 	students, err := su.StudentRepository.GetAll(nim)
 	if err != nil {
-		return nil, http.StatusInternalServerError, err
+		return nil, http.StatusInternalServerError, errors.New("failed to get all students data")
 	}
 	return students, http.StatusOK, nil
 }
@@ -37,7 +38,7 @@ func (su *StudentUsecaseStruct) GetAll(nim string) (*[]student.StudentResponse, 
 func (su *StudentUsecaseStruct) GetById(id string) (*student.StudentResponse, int, error) {
 	student, err := su.StudentRepository.GetById(id)
 	if err != nil {
-		return nil, http.StatusInternalServerError, err
+		return nil, http.StatusInternalServerError, errors.New("failed to get student detail data")
 	}
 	return student, http.StatusOK, nil
 }
@@ -51,7 +52,7 @@ func (su *StudentUsecaseStruct) Create(student *student.CreateStudent) (int, err
 
 	err := su.StudentRepository.Create(&newStudent)
 	if err != nil {
-		return http.StatusInternalServerError, err
+		return http.StatusInternalServerError, errors.New("failed to create student data")
 	}
 	return http.StatusOK, nil
 }
@@ -64,7 +65,7 @@ func (su *StudentUsecaseStruct) Update(student *student.UpdateStudent) (int, err
 
 	err := su.StudentRepository.Update(&newStudent)
 	if err != nil {
-		return http.StatusInternalServerError, err
+		return http.StatusInternalServerError, errors.New("failed to update student data")
 	}
 	return http.StatusOK, nil
 }
@@ -72,7 +73,7 @@ func (su *StudentUsecaseStruct) Update(student *student.UpdateStudent) (int, err
 func (su *StudentUsecaseStruct) Delete(id string) (int, error) {
 	err := su.StudentRepository.Delete(id)
 	if err != nil {
-		return http.StatusInternalServerError, err
+		return http.StatusInternalServerError, errors.New("failed to delete student data")
 	}
 	return http.StatusOK, nil
 }
