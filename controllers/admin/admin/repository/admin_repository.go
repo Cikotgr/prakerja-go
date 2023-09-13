@@ -7,6 +7,7 @@ import (
 
 type AdminRepositoryInterface interface {
 	LoginAdmin(username, password string) (*admin.AdminResponse, error)
+	GetById(id string) (*admin.AdminDetailResponse, error)
 }
 
 type AdminRepositoryStruct struct {
@@ -17,6 +18,15 @@ func NewAdminRepository(DB *gorm.DB) AdminRepositoryInterface {
 	return &AdminRepositoryStruct{
 		DB: DB,
 	}
+}
+
+func (ar *AdminRepositoryStruct) GetById(id string) (*admin.AdminDetailResponse, error) {
+	var admin admin.AdminDetailResponse
+	err := ar.DB.Table("admins").Where("id = ? ", id).First(&admin).Error
+	if err != nil {
+		return nil, err
+	}
+	return &admin, nil
 }
 
 func (ar *AdminRepositoryStruct) LoginAdmin(username, password string) (*admin.AdminResponse, error) {

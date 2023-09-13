@@ -11,6 +11,12 @@ type AdminResponse struct {
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
+type AdminDetailResponse struct {
+	ID       string `gorm:"primarykey" json:"id"`
+	Username string `json:"username"`
+	RoleId   int    `json:"role_id"`
+}
+
 type AdminJWTResponse struct {
 	ID       string `gorm:"primarykey" json:"id"`
 	Username string `json:"username"`

@@ -11,7 +11,6 @@ type CreateStudent struct {
 }
 
 type UpdateStudent struct {
-	ID     string `json:"id" form:"id"`
-	NIM    int    `json:"nim" form:"nim" validate:"required,min=202410102000,max=232410102100"`
-	RoleId int    `json:"role_id" form:"role_id" validate:"required,number"`
+	ID  string `json:"id" form:"id"`
+	NIM int    `json:"nim" form:"nim" validate:"required,min=202410102000,max=232410102100"`
 }

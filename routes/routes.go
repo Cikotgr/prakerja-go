@@ -82,6 +82,7 @@ func StartApp() *echo.Echo {
 	routeAdmin := e.Group("/admins")
 	routeAdmin.POST("/login", AdminH.LoginAdmin)
 	routeAdmin.Use(echojwt.WithConfig(configAdmin))
+	routeAdmin.GET("/details", AdminH.GetById)
 	routeAdmin.GET("/students", AdminStudentH.GetAll)
 	routeAdmin.GET("/students/:id", AdminStudentH.GetById)
 	routeAdmin.POST("/students", AdminStudentH.Create)

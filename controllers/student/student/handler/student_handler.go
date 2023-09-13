@@ -1,8 +1,6 @@
 package handler
 
 import (
-	"fmt"
-
 	"github.com/ardin2001/backend-pemilu/controllers/student/student"
 	"github.com/ardin2001/backend-pemilu/controllers/student/student/usecase"
 	"github.com/ardin2001/backend-pemilu/helper"
@@ -27,7 +25,6 @@ func NewStudentHandler(StudentUsecase usecase.StudentUsecaseInterface) StudentHa
 
 func (ah *StudentHandlerStruct) GetById(c echo.Context) error {
 	user := c.Get("user").(*jwt.Token)
-	fmt.Println("token :", user)
 	claims := user.Claims.(*student.JwtCustomClaimsStudent)
 	studentJWTResponse, statusCode, err := ah.StudentUsecase.LoginStudent(claims.NIM)
 	if err != nil {

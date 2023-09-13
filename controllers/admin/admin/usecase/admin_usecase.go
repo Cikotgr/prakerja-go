@@ -13,6 +13,7 @@ import (
 )
 
 type AdminUsecaseInterface interface {
+	GetById(id string) (*admin.AdminDetailResponse, int, error)
 	LoginAdmin(username, password string) (*admin.AdminJWTResponse, int, error)
 }
 
@@ -24,6 +25,15 @@ func NewAdminUsecase(AdminRepository repository.AdminRepositoryInterface) AdminU
 	return &AdminUsecaseStruct{
 		AdminRepository: AdminRepository,
 	}
+}
+
+func (au *AdminUsecaseStruct) GetById(id string) (*admin.AdminDetailResponse, int, error) {
+	admin, err := au.AdminRepository.GetById(id)
+	if err != nil {
+		return nil, http.StatusBadRequest, errors.New("failed to get detail data admin")
+	}
+
+	return admin, http.StatusOK, nil
 }
 
 func (au *AdminUsecaseStruct) LoginAdmin(username, password string) (*admin.AdminJWTResponse, int, error) {
