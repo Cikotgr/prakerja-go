@@ -22,6 +22,9 @@ import (
 	StudentHandler "github.com/ardin2001/backend-pemilu/controllers/student/student/handler"
 	StudentRepository "github.com/ardin2001/backend-pemilu/controllers/student/student/repository"
 	StudentUsecase "github.com/ardin2001/backend-pemilu/controllers/student/student/usecase"
+	StudentVoteHandler "github.com/ardin2001/backend-pemilu/controllers/student/vote/handler"
+	StudentVoteRepository "github.com/ardin2001/backend-pemilu/controllers/student/vote/repository"
+	StudentVoteUsecase "github.com/ardin2001/backend-pemilu/controllers/student/vote/usecase"
 	"github.com/ardin2001/backend-pemilu/helper"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/joho/godotenv"
@@ -50,6 +53,9 @@ func StartApp() *echo.Echo {
 	StudentCandidateR := StudentCandidateRepository.NewCandidateRepository(DB)
 	StudentCandidateU := StudentCandidateUsecase.NewCandidateUsecase(StudentCandidateR)
 	StudentCandidateH := StudentCandidateHandler.NewCandidateHandler(StudentCandidateU)
+	StudentVoteR := StudentVoteRepository.NewVoteRepository(DB)
+	StudentVoteU := StudentVoteUsecase.NewVoteUsecase(StudentVoteR)
+	StudentVoteH := StudentVoteHandler.NewVoteHandler(StudentVoteU)
 
 	e := echo.New()
 	godotenv.Load()
@@ -100,6 +106,7 @@ func StartApp() *echo.Echo {
 	routeStudent.GET("/details", StudentH.GetById)
 	routeStudent.GET("/candidates", StudentCandidateH.GetAll)
 	routeStudent.GET("/candidates/:id", StudentCandidateH.GetById)
+	routeStudent.POST("/votes", StudentVoteH.Create)
 
 	return e
 }
