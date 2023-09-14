@@ -15,6 +15,9 @@ import (
 	AdminStudentHandler "github.com/ardin2001/backend-pemilu/controllers/admin/student/handler"
 	AdminStudentRepository "github.com/ardin2001/backend-pemilu/controllers/admin/student/repository"
 	AdminStudentUsecase "github.com/ardin2001/backend-pemilu/controllers/admin/student/usecase"
+	AdminVoteHandler "github.com/ardin2001/backend-pemilu/controllers/admin/vote/handler"
+	AdminVoteRepository "github.com/ardin2001/backend-pemilu/controllers/admin/vote/repository"
+	AdminVoteUsecase "github.com/ardin2001/backend-pemilu/controllers/admin/vote/usecase"
 	StudentCandidateHandler "github.com/ardin2001/backend-pemilu/controllers/student/candidate/handler"
 	StudentCandidateRepository "github.com/ardin2001/backend-pemilu/controllers/student/candidate/repository"
 	StudentCandidateUsecase "github.com/ardin2001/backend-pemilu/controllers/student/candidate/usecase"
@@ -46,6 +49,9 @@ func StartApp() *echo.Echo {
 	AdminCandidateR := AdminCandidateRepository.NewCandidateRepository(DB)
 	AdminCandidateU := AdminCandidateUsecase.NewCandidateUsecase(AdminCandidateR)
 	AdminCandidateH := AdminCandidateHandler.NewCandidateHandler(AdminCandidateU)
+	AdminVoteR := AdminVoteRepository.NewVoteRepository(DB)
+	AdminVoteU := AdminVoteUsecase.NewVoteUsecase(AdminVoteR)
+	AdminVoteH := AdminVoteHandler.NewVoteHandler(AdminVoteU)
 
 	StudentR := StudentRepository.NewStudentRepository(DB)
 	StudentU := StudentUsecase.NewStudentUsecase(StudentR)
@@ -99,6 +105,7 @@ func StartApp() *echo.Echo {
 	routeAdmin.POST("/candidates", AdminCandidateH.Create)
 	routeAdmin.PUT("/candidates/:id", AdminCandidateH.Update)
 	routeAdmin.DELETE("/candidates/:id", AdminCandidateH.Delete)
+	routeAdmin.GET("/votes", AdminVoteH.GetAll)
 
 	routeStudent := e.Group("/students")
 	routeStudent.POST("/login", StudentH.LoginStudent)

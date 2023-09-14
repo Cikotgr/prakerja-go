@@ -32,7 +32,7 @@ func (vu *VoteUsecaseStruct) Create(vote *vote.CreateVote) (int, error) {
 
 	err := vu.VoteRepository.Create(&newStudent)
 	if err != nil {
-		return http.StatusInternalServerError, errors.New("failed to create vote data")
+		return http.StatusBadRequest, errors.New("failed to create vote data")
 	}
 	return http.StatusOK, nil
 }
